@@ -2,7 +2,7 @@
 import re
 from discord.ext import commands
 from config import settings
-from lists_conf import possible_hello, people_helpers, USER_AGENT, url, url_gallery, url_gallery_end
+from lists_conf import possible_hello, people_helpers, url, url_gallery, url_gallery_end
 from random import randint
 import urllib.parse
 from req import get_soup

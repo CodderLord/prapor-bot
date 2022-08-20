@@ -9,6 +9,5 @@ def get_soup(urls):
 		return req
 	except Exception as err:
 		print(f"{err=}")
-		time.sleep(3)
 		
 		
