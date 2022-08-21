@@ -25,11 +25,14 @@ async def on_message(message):
 	if message.author == client.user:
 		return
 	message.content = message.content.lower()
-	await message.channel.purge(limit=1)
+	try:
+		await message.channel.purge(limit=1)
+	except AttributeError:
+		pass
 	result_hello = re.search(r"всем привет", str(message.content), re.I)
 	result_help = re.search(r".?\sпомо[чьщ]\s?.?", str(message.content), re.I)
 	result_live = re.search(r"есть кто живой", str(message.content), re.I)
-	result_bot_help = re.search(r".?прапор помоги с квестом .?", str(message.content), re.I)
+	result_bot_help = re.search(r".?\s?прапор помоги с квестом .?", str(message.content), re.I)
 	if result_hello is not None:
 		await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
 		return
