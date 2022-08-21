@@ -7,6 +7,7 @@ from random import randint
 import urllib.parse
 from req import get_soup
 from bs4 import BeautifulSoup
+import time
 
 
 intents = discord.Intents.all()
@@ -21,12 +22,14 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-	if message.author == "Прапор#3826":
+	if message.author == client.user:
 		return
+	message.content = message.content.lower()
+	await message.channel.purge(limit=1)
 	result_hello = re.search(r"всем привет", str(message.content), re.I)
-	result_help = re.search(r".?\sпомо[чщ]", str(message.content), re.I)
+	result_help = re.search(r".?\sпомо[чьщ]\s?.?", str(message.content), re.I)
 	result_live = re.search(r"есть кто живой", str(message.content), re.I)
-	result_bot_help = re.search(r".?Прапор помоги с квестом .?", str(message.content), re.I)
+	result_bot_help = re.search(r".?прапор помоги с квестом .?", str(message.content), re.I)
 	if result_hello is not None:
 		await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
 		return
@@ -70,6 +73,7 @@ async def on_message(message):
 			result_search_gallery = result_search_gallery.find_all("a")
 			for result_href in result_search_gallery:
 				await message.channel.send(result_href.get("href"))
+				time.sleep(1)
 		except AttributeError:
 			pass
 		return
