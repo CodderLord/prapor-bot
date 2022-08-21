@@ -44,7 +44,7 @@ async def on_message(message):
 		return
 	if result_bot_help is not None:
 		await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
-		result_message = str(message.content).replace(f"Прапор помоги с квестом ", '')
+		result_message = str(message.content).replace(f"прапор помоги с квестом ", '')
 		request = get_soup((url + urllib.parse.quote(result_message)))
 		request_gallery = get_soup((url_gallery + urllib.parse.quote(result_message) + url_gallery_end))
 		try:
