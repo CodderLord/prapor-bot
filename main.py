@@ -24,7 +24,7 @@ async def on_message(message):
 	if message.author == "Прапор#3826":
 		return
 	result_hello = re.search(r"всем привет", str(message.content), re.I)
-	result_help = re.search(r"помо[чщ] .?", str(message.content), re.I)
+	result_help = re.search(r".?\sпомо[чщ]", str(message.content), re.I)
 	result_live = re.search(r"есть кто живой", str(message.content), re.I)
 	result_bot_help = re.search(r".?Прапор помоги с квестом .?", str(message.content), re.I)
 	if result_hello is not None:

@@ -1,6 +1,5 @@
 import requests
 from lists_conf import USER_AGENT
-import time
 
 
 def get_soup(urls):
