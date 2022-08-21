@@ -32,7 +32,7 @@ async def on_message(message):
 	result_hello = re.search(r"всем привет", str(message.content), re.I)
 	result_help = re.search(r".?\sпомо[чьщ]\s?.?", str(message.content), re.I)
 	result_live = re.search(r"есть кто живой", str(message.content), re.I)
-	result_bot_help = re.search(r".?\s?прапор помоги с квестом .?", str(message.content), re.I)
+	result_bot_help = re.search(r"прапор помоги с квестом .?", str(message.content), re.I)
 	if result_hello is not None:
 		await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
 		return
@@ -40,7 +40,7 @@ async def on_message(message):
 		await message.channel.send(f"")
 		return
 	if result_help is not None:
-		await message.channel.send(f"За помощью можете обратится к постоянным шерпам клана - {people_helpers}")
+		await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers[range(len(people_helpers)-1)]}")
 		return
 	if result_bot_help is not None:
 		await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
