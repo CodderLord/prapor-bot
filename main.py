@@ -24,62 +24,58 @@ async def on_ready():
 async def on_message(message):
 	if message.author == client.user:
 		return
-	message.content = message.content.lower()
-	try:
-		await message.channel.purge(limit=1)
-	except AttributeError:
-		pass
-	result_hello = re.search(r"всем привет", str(message.content), re.I)
-	result_help = re.search(r".?\sпомо[чьщ]\s?.?", str(message.content), re.I)
-	result_live = re.search(r"есть кто живой", str(message.content), re.I)
-	result_bot_help = re.search(r"прапор помоги с квестом .?", str(message.content), re.I)
-	if result_hello is not None:
-		await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
-		return
-	if result_live is not None:
-		await message.channel.send(f"")
-		return
-	if result_help is not None:
-		await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers}")
-		return
-	if result_bot_help is not None:
-		await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
-		result_message = str(message.content).replace(f"прапор помоги с квестом ", '')
-		request = get_soup((url + urllib.parse.quote(result_message)))
-		request_gallery = get_soup((url_gallery + urllib.parse.quote(result_message) + url_gallery_end))
-		try:
-			result_url_gallery = BeautifulSoup(request_gallery.text, "html.parser")
-			result_url_gallery = result_url_gallery.find(class_="unified-search__result__header").find("a").get("href")
-		except AttributeError:
-			await message.channel.send("К сожалению ничего не смог найти.")
+	else:
+		message.content = message.content.lower()
+		result_hello = re.search(r"всем привет", str(message.content), re.I)
+		result_help = re.search(r".?\sпомо[чьщ]\s?.?", str(message.content), re.I)
+		result_live = re.search(r"есть кто живой.?", str(message.content), re.I)
+		result_bot_help = re.search(r"прапор помоги с квестом .?", str(message.content), re.I)
+		if result_hello is not None:
+			await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
 			return
-		result_search_url_gallery = get_soup(result_url_gallery)
-		result_search_gallery = BeautifulSoup(result_search_url_gallery.text, "html.parser")
-		result_search_gallery = result_search_gallery.find(class_="gallery mw-gallery-packed")
-		result_search_table = BeautifulSoup(request.text, "html.parser")
-		result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
-		request_end_link = get_soup(result_table_href)
-		result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
-		result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
-		table_info = result.replace('\n\n\n\n', '\n').strip()
-		target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
-		await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
-		await message.channel.send(table_info)
-		await message.channel.send(target)
-		try:
-			block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
-			await message.channel.send(block_end_target)
-		except AttributeError:
-			pass
-		
-		try:
-			result_search_gallery = result_search_gallery.find_all("a")
-			for result_href in result_search_gallery:
-				await message.channel.send(result_href.get("href"))
-				time.sleep(1)
-		except AttributeError:
-			pass
-		return
+		if result_live is not None:
+			await message.channel.send(f"")
+			return
+		if result_help is not None:
+			await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers}")
+			return
+		if result_bot_help is not None:
+			await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
+			result_message = str(message.content).replace(f"прапор помоги с квестом ", '')
+			request = get_soup((url + urllib.parse.quote(result_message)))
+			request_gallery = get_soup((url_gallery + urllib.parse.quote(result_message) + url_gallery_end))
+			try:
+				result_url_gallery = BeautifulSoup(request_gallery.text, "html.parser")
+				result_url_gallery = result_url_gallery.find(class_="unified-search__result__header").find("a").get("href")
+			except AttributeError:
+				await message.channel.send("К сожалению ничего не смог найти.")
+				return
+			result_search_url_gallery = get_soup(result_url_gallery)
+			result_search_gallery = BeautifulSoup(result_search_url_gallery.text, "html.parser")
+			result_search_gallery = result_search_gallery.find(class_="gallery mw-gallery-packed")
+			result_search_table = BeautifulSoup(request.text, "html.parser")
+			result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
+			request_end_link = get_soup(result_table_href)
+			result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
+			result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
+			table_info = result.replace('\n\n\n\n', '\n').strip()
+			target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
+			await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
+			await message.channel.send(table_info)
+			await message.channel.send(target)
+			try:
+				block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
+				await message.channel.send(block_end_target)
+			except AttributeError:
+				pass
+			try:
+				result_search_gallery = result_search_gallery.find_all("a")
+				for result_href in result_search_gallery:
+					await message.channel.send(result_href.get("href"))
+					time.sleep(0.5)
+			except AttributeError:
+				pass
+			return
 
 
 @bot.event
@@ -90,5 +86,4 @@ async def on_member_join(member):
 		f'"Прапор помоги " и добавь " с квестом [Название квеста, можно и примерное]" если помощь нужна именно с квестом'
 		f'\nЕсли ничего не нашлось, попробуй перефразировать, '
 		f'или обратиться к моей поддержке, может у меня уже с глазами что или кто с моих доки посеял"')
-
 bot.run(settings['token'])
