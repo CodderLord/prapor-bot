@@ -40,7 +40,7 @@ async def on_message(message):
 		await message.channel.send(f"")
 		return
 	if result_help is not None:
-		await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers[range(len(people_helpers)-1)]}")
+		await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers}")
 		return
 	if result_bot_help is not None:
 		await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
