@@ -8,11 +8,16 @@ import urllib.parse
 from req import get_soup
 from bs4 import BeautifulSoup
 import time
+import sys
 
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
 client = discord.Client(intents=intents)
+
+@bot.command
+async def die():
+	sys.exit()
 
 
 @bot.event
