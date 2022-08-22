@@ -15,10 +15,12 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
 client = discord.Client(intents=intents)
 
+
 @bot.command
 async def die():
+	print("Прапор вылетел с дискорда")
 	sys.exit()
-
+	
 
 @bot.event
 async def on_ready():
