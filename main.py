@@ -17,7 +17,7 @@ client = discord.Client(intents=intents)
 
 
 @bot.command()
-async def die(ctx):
+async def die_on_bot(ctx):
 	print("Прапор вылетел с дискорда")
 	sys.exit()
 	
