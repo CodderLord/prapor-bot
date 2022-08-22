@@ -8,10 +8,12 @@ import urllib.parse
 from req import get_soup
 from bs4 import BeautifulSoup
 import time
-import sys
 
 
-intents = discord.Intents.all()
+intents = discord.Intents.default()
+intents.members = True
+#intents.presences = True
+#intents.message_content = True
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
 client = discord.Client(intents=intents)
 
@@ -77,14 +79,42 @@ async def on_message(message):
 			except AttributeError:
 				pass
 			return
+"""https://discord.com/channels/1000370246428921909/1000370247553011773 ---- моой
+https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
 
 
 @bot.event
 async def on_member_join(member):
+	global id_massage, massage
 	await member.create_dm()
 	await member.dm_channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{member.name}\n'
-		f'Я могу помочь тебе с выполнением всех квестов, новоприбывший\nДля этого просто напиши мне, или в общий чат '
-		f'"Прапор помоги " и добавь " с квестом [Название квеста, можно и примерное]" если помощь нужна именно с квестом'
-		f'\nЕсли ничего не нашлось, попробуй перефразировать, '
-		f'или обратиться к моей поддержке, может у меня уже с глазами что или кто с моих доки посеял"')
+		f'Я могу порыться в документах, поискать что-то о интересующих тебя квестах\nДля этого просто напиши мне, или в специальный чат "Для новеньких --> Квесты прапор". \nПрапор помоги " и добавь " с квестом [Название квеста, можно и примерное]"')
+	massage = await member.dm_channel.send(
+		"Ну а теперь, напиши мне количество своего опыта в Таркове\n**Нож - меньше 400 часов**\n**Меч - от 400 до 1400 часов**\n**Два меча - от 1400 часов**\nКликни на нужную рекацию для указания кол. часов.\nЭто нужно для выдачи роли.")
+	await massage.add_reaction("🔪")
+	await massage.add_reaction("🗡️")
+	await massage.add_reaction("⚔️")
+	id_massage = massage.id
+	
+	
+@bot.event
+async def on_raw_reaction_add(payload):
+	try:
+		ourMessageID = id_massage
+		if ourMessageID == payload.message_id:
+			guild = bot.get_guild(993850749236813915)
+			member = discord.utils.get(guild.members, id=payload.user_id)
+			emoji = payload.emoji.name
+			if emoji == "🔪":
+				role = discord.utils.get(guild.roles, name="Новобранец")
+				await member.add_roles(role)
+			if emoji == "🗡️":
+				role = discord.utils.get(guild.roles, name="Солдат")
+				await member.add_roles(role)
+			if emoji == "⚔️":
+				role = discord.utils.get(guild.roles, name="Ветеран")
+				await member.add_roles(role)
+	except NameError:
+		pass
+			
 bot.run(settings['token'])
