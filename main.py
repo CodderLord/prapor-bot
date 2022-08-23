@@ -83,7 +83,7 @@ https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
 async def on_member_join(member):
 	global id_massage, massage
 	for ch in bot.get_guild(member.guild.id).channels:
-		if ch.name == "общение":
+		if ch.id == 993850749677211679:
 			await bot.get_channel(ch.id).send(f"{possible_hello_for_new_user[randint(0, len(possible_hello_for_new_user)-1)]}{member.name}")
 	await member.create_dm()
 	await member.dm_channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{member.name}\n'
