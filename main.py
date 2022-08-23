@@ -31,13 +31,9 @@ async def on_message(message):
 		message.content = message.content.lower()
 		result_hello = re.search(r"всем привет", str(message.content), re.I)
 		result_help = re.search(r".?\sпомо[чьщ]\s?.?", str(message.content), re.I)
-		result_live = re.search(r"есть кто живой.?", str(message.content), re.I)
 		result_bot_help = re.search(r"прапор помоги с квестом .?", str(message.content), re.I)
 		if result_hello is not None:
 			await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
-			return
-		if result_live is not None:
-			await message.channel.send(f"")
 			return
 		if result_help is not None:
 			await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers}")
@@ -86,6 +82,9 @@ https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
 @bot.event
 async def on_member_join(member):
 	global id_massage, massage
+	for ch in bot.get_guild(member.guild.id).channels:
+		if ch.name == "общение":
+			await bot.get_channel(ch.id).send(f"{possible_hello[randint(0, len(possible_hello)-1)]}{member.name}")
 	await member.create_dm()
 	await member.dm_channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{member.name}\n'
 		f'Я могу порыться в документах, поискать что-то о интересующих тебя квестах\nДля этого просто напиши мне, или в специальный чат "Для новеньких --> Квесты прапор". \nПрапор помоги " и добавь " с квестом [Название квеста, можно и примерное]"')
