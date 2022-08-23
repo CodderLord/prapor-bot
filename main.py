@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import time
 
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 #intents.presences = True
 #intents.message_content = True
