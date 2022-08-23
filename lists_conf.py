@@ -25,7 +25,6 @@ possible_hello_for_new_user = ["Вы только взгляните на нов
                                "Парни, новый на горизонте!\nСкажите привет ",
                                "Да чтоб меня, какие люди!\nПривет "]
 
-people_helpers = ["@TrewikJumia#3744", "@Rezolution#2106"]
 
 USER_AGENT = {
   "user-agent":

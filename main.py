@@ -2,7 +2,7 @@
 import re
 from discord.ext import commands
 from config import settings
-from lists_conf import possible_hello, possible_hello_for_new_user, people_helpers, url, url_gallery, url_gallery_end
+from lists_conf import possible_hello, possible_hello_for_new_user, url, url_gallery, url_gallery_end
 from random import randint
 import urllib.parse
 from req import get_soup
@@ -34,9 +34,6 @@ async def on_message(message):
 		result_bot_help = re.search(r"прапор помоги с квестом .?", str(message.content), re.I)
 		if result_hello is not None:
 			await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
-			return
-		if result_help is not None:
-			await message.channel.send(f"Помочь могут постоянные шерпы клана - {people_helpers}")
 			return
 		if result_bot_help is not None:
 			await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
