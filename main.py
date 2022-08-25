@@ -8,7 +8,10 @@ import urllib.parse
 from req import get_soup
 from bs4 import BeautifulSoup
 import time
+import datetime
+import sqlite3
 
+db = sqlite3.connect('time_voice_users.db')
 
 intents = discord.Intents.all()
 intents.members = True
@@ -82,7 +85,7 @@ https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
 
 @bot.event
 async def on_member_join(member):
-	global id_massage, massage
+	global id_massage, mes
 	for ch in bot.get_guild(member.guild.id).channels:
 		if ch.id == 993850749677211679:
 			await bot.get_channel(ch.id).send(f"{possible_hello_for_new_user[randint(0, len(possible_hello_for_new_user)-1)]}{member.name}")
@@ -94,6 +97,7 @@ async def on_member_join(member):
 	await massage.add_reaction("🔪")
 	await massage.add_reaction("🗡️")
 	await massage.add_reaction("⚔️")
+	mes = massage
 	id_massage = massage.id
 	
 	
@@ -120,7 +124,15 @@ async def on_raw_reaction_add(payload):
 					"Прошаренный да?\nНу смотри, соклановцам всегда помощь нужна.Если хочешь им как-то помочь можешь стать шерпом клана.\nДля этого обратись к Админу клана, заму, или модераторам.\nМы всегда будем рады.")
 				await member.dm_channel.send(
 					"Если хотите влиться в клан и стать Модератором клана - пишите Администраторам или модерам клана.")
+			await mes.delete(delay=None)
 	except NameError:
 		pass
-			
+	
+	
+#@bot.event
+#async def on_voice_state_update(member, before, after):
+#	print(f"member: \n{member}")
+#	print(f"before: \n{before.requested_to_speak_at}")
+#	print(f"after: \n{after.requested_to_speak_at}")
+
 bot.run(settings['token'])
