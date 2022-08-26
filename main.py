@@ -115,31 +115,27 @@ async def on_message(message):
 			result_search_gallery = BeautifulSoup(result_search_url_gallery.text, "html.parser")
 			result_search_gallery = result_search_gallery.find(class_="gallery mw-gallery-packed")
 			result_search_table = BeautifulSoup(request.text, "html.parser")
+			result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
+			request_end_link = get_soup(result_table_href)
+			result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
+			result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
+			table_info = result.replace('\n\n\n\n', '\n').strip()
+			target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
+			await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
+			await message.channel.send(table_info)
+			await message.channel.send(target)
 			try:
-				result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
-				request_end_link = get_soup(result_table_href)
-				result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
-				result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
-				table_info = result.replace('\n\n\n\n', '\n').strip()
-				target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
-				await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
-				await message.channel.send(table_info)
-				await message.channel.send(target)
-				try:
-					block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
-					await message.channel.send(block_end_target)
-				except AttributeError:
-					pass
-				try:
-					result_search_gallery = result_search_gallery.find_all("a")
-					for result_href in result_search_gallery:
-						await message.channel.send(result_href.get("href"))
-						time.sleep(0.5)
-				except AttributeError:
-					pass
-				return
+				block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
+				await message.channel.send(block_end_target)
 			except AttributeError:
-				await message.channel.send("К сожалению ничего не смог найти.")
+				pass
+			try:
+				result_search_gallery = result_search_gallery.find_all("a")
+				for result_href in result_search_gallery:
+					await message.channel.send(result_href.get("href"))
+					time.sleep(0.5)
+			except AttributeError:
+				pass
 				return
 """https://discord.com/channels/1000370246428921909/1000370247553011773 ---- моой
 https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
