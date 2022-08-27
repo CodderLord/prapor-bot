@@ -172,20 +172,21 @@ async def on_raw_reaction_add(payload):
 		ourMessageID = id_massage
 		if ourMessageID == payload.message_id:
 			guild = bot.get_guild(993850749236813915)
+			base_roles = discord.utils.get(guild.roles, name="Бродяга")
 			member = discord.utils.get(guild.members, id=payload.user_id)
 			emoji = payload.emoji.name
 			if emoji == "🔪":
-				await member.remove_roles(guild.roles)
+				await member.delete_role(base_roles)
 				role = discord.utils.get(guild.roles, name="Новобранец")
 				await member.add_roles(role)
 			if emoji == "🗡️":
-				await member.remove_roles(guild.roles)
+				await member.delete_role(base_roles)
 				role = discord.utils.get(guild.roles, name="Солдат")
 				await member.add_roles(role)
 				await member.dm_channel.send(
 					"Если хотите влиться в клан и стать Модератором клана - пишите Администраторам или модерам клана.")
 			if emoji == "⚔️":
-				await member.remove_roles(guild.roles)
+				await member.delete_role(base_roles)
 				role = discord.utils.get(guild.roles, name="Ветеран")
 				await member.add_roles(role)
 				await member.dm_channel.send(
