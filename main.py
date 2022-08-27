@@ -115,27 +115,31 @@ async def on_message(message):
 			result_search_gallery = BeautifulSoup(result_search_url_gallery.text, "html.parser")
 			result_search_gallery = result_search_gallery.find(class_="gallery mw-gallery-packed")
 			result_search_table = BeautifulSoup(request.text, "html.parser")
-			result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
-			request_end_link = get_soup(result_table_href)
-			result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
-			result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
-			table_info = result.replace('\n\n\n\n', '\n').strip()
-			target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
-			await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
-			await message.channel.send(table_info)
-			await message.channel.send(target)
 			try:
-				block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
-				await message.channel.send(block_end_target)
+				result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
+				request_end_link = get_soup(result_table_href)
+				result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
+				result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
+				table_info = result.replace('\n\n\n\n', '\n').strip()
+				target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
+				await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
+				await message.channel.send(table_info)
+				await message.channel.send(target)
+				try:
+					block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
+					await message.channel.send(block_end_target)
+				except AttributeError:
+					pass
+				try:
+					result_search_gallery = result_search_gallery.find_all("a")
+					for result_href in result_search_gallery:
+						await message.channel.send(result_href.get("href"))
+						time.sleep(0.5)
+				except AttributeError:
+					pass
+				return
 			except AttributeError:
-				pass
-			try:
-				result_search_gallery = result_search_gallery.find_all("a")
-				for result_href in result_search_gallery:
-					await message.channel.send(result_href.get("href"))
-					time.sleep(0.5)
-			except AttributeError:
-				pass
+				await message.channel.send("К сожалению ничего не смог найти.")
 				return
 """https://discord.com/channels/1000370246428921909/1000370247553011773 ---- моой
 https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
@@ -167,15 +171,20 @@ async def on_raw_reaction_add(payload):
 			guild = bot.get_guild(993850749236813915)
 			member = discord.utils.get(guild.members, id=payload.user_id)
 			emoji = payload.emoji.name
+			base_roles = discord.utils.get(guild.roles, name="Бродяга")
+			await member.add_roles(base_roles)
 			if emoji == "🔪":
+				await member.remove_roles(guild.roles, name="Бродяга")
 				role = discord.utils.get(guild.roles, name="Новобранец")
 				await member.add_roles(role)
 			if emoji == "🗡️":
+				await member.remove_roles(guild.roles, name="Бродяга")
 				role = discord.utils.get(guild.roles, name="Солдат")
 				await member.add_roles(role)
 				await member.dm_channel.send(
 					"Если хотите влиться в клан и стать Модератором клана - пишите Администраторам или модерам клана.")
 			if emoji == "⚔️":
+				await member.remove_roles(guild.roles, name="Бродяга")
 				role = discord.utils.get(guild.roles, name="Ветеран")
 				await member.add_roles(role)
 				await member.dm_channel.send(
