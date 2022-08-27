@@ -159,6 +159,9 @@ async def on_member_join(member):
 	await massage.add_reaction("🔪")
 	await massage.add_reaction("🗡️")
 	await massage.add_reaction("⚔️")
+	guild = bot.get_guild(993850749236813915)
+	base_roles = discord.utils.get(guild.roles, name="Бродяга")
+	await member.add_roles(base_roles)
 	mes = massage
 	id_massage = massage.id
 	
@@ -171,8 +174,6 @@ async def on_raw_reaction_add(payload):
 			guild = bot.get_guild(993850749236813915)
 			member = discord.utils.get(guild.members, id=payload.user_id)
 			emoji = payload.emoji.name
-			base_roles = discord.utils.get(guild.roles, name="Бродяга")
-			await member.add_roles(base_roles)
 			if emoji == "🔪":
 				await member.remove_roles(guild.roles, name="Бродяга")
 				role = discord.utils.get(guild.roles, name="Новобранец")
