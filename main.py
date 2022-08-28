@@ -165,6 +165,12 @@ async def on_member_join(member):
 	mes = massage
 	id_massage = massage.id
 	
+
+@bot.event
+async def on_member_remove(member):
+	channel = bot.get_channel(1013337671394922546)
+	await channel.send(f"{member} ушёл из сервера.")
+	
 	
 @bot.event
 async def on_raw_reaction_add(payload):
