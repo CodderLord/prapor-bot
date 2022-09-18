@@ -141,7 +141,11 @@ async def on_message(message):
 				all_win = win.strip().split('\n')
 			except AttributeError:
 				pass
-			await message.channel.send(f'{str(target.strip())}')
+			try:
+				await message.channel.send(f'{str(target.strip())}')
+			except AttributeError:
+				await message.channel.send('К сожалению в документах по запросу ничего не нашлось.')
+				return
 			try:
 				await message.channel.send(f'{str(win.strip())}')
 			except nextcord.errors.HTTPException:
