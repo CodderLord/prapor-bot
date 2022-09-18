@@ -9,15 +9,19 @@ from req import get_soup
 from bs4 import BeautifulSoup
 import time
 import sqlite3
+from copy import deepcopy
 # import datetime
 # import youtube_dl
 # import os
 
-db = sqlite3.connect('time_voice_users.db')
+db_voice = sqlite3.connect('time_voice_users.db')
+db_quests = sqlite3.connect('prapor_info.db')
 
 intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
 client = nextcord.Client(intents=intents)
+
+all_quests = []
 
 
 """@bot.command
@@ -83,6 +87,7 @@ async def stop(ctx):
 @bot.event
 async def on_ready():
 	print(f'{settings["bot"]} залетел в Дискорд.')
+	extract_db()
 
 
 @bot.event
@@ -97,46 +102,59 @@ async def on_message(message):
 			await message.channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{message.author}')
 			return
 		if result_bot_help is not None:
+			quests = deepcopy(all_quests)
 			await message.channel.send("Сейчас поищу в бумагах, может найду что нибудь.")
 			result_message = str(message.content).replace(f"прапор помоги с квестом ", '')
-			request = get_soup((url + urllib.parse.quote(result_message)))
-			request_gallery = get_soup((url_gallery + urllib.parse.quote(result_message) + url_gallery_end))
+			target = None
+			win = None
+			help_img = None
+			param_max = len(result_message.replace(" ", ''))
+			name_quest_user = list(
+				result_message.lower().replace(" ", '').replace(".", '').replace("-", '').replace("?", '').replace("!", ''))
+			for i in quests:
+				copy_i = i.copy()
+				param = 0
+				param_quest_max = len(i)
+				for b in name_quest_user:
+					if param >= param_max - 2:
+						try:
+							if b == i[-1]:
+								if param_quest_max <= param_max + 4:
+									result = ''.join(copy_i)
+									quest_result = db_quests.execute(f"SELECT * FROM quests WHERE name_quest = '{result}'")
+									for id_result_quest, name_quest, how_take, target, win, help_img in quest_result:
+										target = target
+										win = win
+										help_img = help_img
+									try:
+										tr = int(i[-1])
+										break
+									except ValueError:
+										break
+						except IndexError:
+							pass
+					if b in i:
+						param += 1
+						i.remove(b)
+			all_win = ''
 			try:
-				result_url_gallery = BeautifulSoup(request_gallery.text, "html.parser")
-				result_url_gallery = result_url_gallery.find(class_="unified-search__result__header").find("a").get("href")
+				all_win = win.strip().split('\n')
 			except AttributeError:
-				await message.channel.send("К сожалению ничего не смог найти.")
-				return
-			result_search_url_gallery = get_soup(result_url_gallery)
-			result_search_gallery = BeautifulSoup(result_search_url_gallery.text, "html.parser")
-			result_search_gallery = result_search_gallery.find(class_="gallery mw-gallery-packed")
-			result_search_table = BeautifulSoup(request.text, "html.parser")
+				pass
+			await message.channel.send(f'{str(target.strip())}')
 			try:
-				result_table_href = result_search_table.find(class_="block block-system clearfix").find("a").get("href")
-				request_end_link = get_soup(result_table_href)
-				result_end_link = BeautifulSoup(request_end_link.text, "html.parser")
-				result = result_end_link.find(class_="inside panels-flexible-region-inside panels-flexible-region-tankpanel-center-inside panels-flexible-region-inside-last").text
-				table_info = result.replace('\n\n\n\n', '\n').strip()
-				target = result_end_link.find(class_="panel-pane pane-entity-field pane-node-field-target").text
-				await message.channel.send(f"Вот что сумел найти по твоему запросу, {message.author}:")
-				await message.channel.send(table_info)
-				await message.channel.send(target)
+				await message.channel.send(f'{str(win.strip())}')
+			except nextcord.errors.HTTPException:
 				try:
-					block_end_target = result_end_link.find(class_="block block-entity-field tank-type-data2 clearfix").text
-					await message.channel.send(block_end_target)
-				except AttributeError:
+					for w in all_win:
+						await message.channel.send(f'{str(w.strip())}')
+						time.sleep(1)
+				except nextcord.errors.HTTPException:
 					pass
-				try:
-					result_search_gallery = result_search_gallery.find_all("a")
-					for result_href in result_search_gallery:
-						await message.channel.send(result_href.get("href"))
-						time.sleep(0.5)
-				except AttributeError:
-					pass
-				return
-			except AttributeError:
-				await message.channel.send("К сожалению ничего не смог найти.")
-				return
+			cl_img = help_img.replace('[', '').replace(']', '').replace("'", '').split(',')
+			for im in cl_img:
+				time.sleep(1)
+				await message.channel.send(f'{str(im)}')
 """https://discord.com/channels/1000370246428921909/1000370247553011773 ---- моой
 https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
 
@@ -158,7 +176,6 @@ async def on_member_join(member):
 	await massage.add_reaction("💣")
 	guild = bot.get_guild(993850749236813915)
 	base_roles = nextcord.utils.get(guild.roles, name="Бродяга")
-	print(base_roles)
 	await member.add_roles(base_roles)
 	mes = massage
 	id_massage = massage.id
@@ -208,8 +225,20 @@ async def on_raw_reaction_add(payload):
 			await mes.delete(delay=None)
 	except NameError:
 		pass
-	
-	
+
+
+def extract_db():
+	db_data = db_quests.execute("SELECT id, name_quest FROM quests")
+	for data in db_data:
+		id_in_db, name_quest = data
+		all_quests.append(list(
+			name_quest.lower().replace(" ", '').replace(".", '').replace("-", '').replace("?", '').replace("!", '').replace(
+				"(квест)", '').replace("(МР133)", '').replace("(АКС74У)", '').replace("(MP5)", '').replace("M4A1)", '').replace(
+				"(ДВЛ10)", '').replace("(R11RSASS)", '').replace("(RemingtonM870)", '').replace("(АКМ)", '').replace("(АКС74Н)",'').replace(
+				"(АК105)", '').replace("(АСВал)", '').replace("(АК102)", '').replace("(SIGMPX)", '').replace("(АКМН)", '').replace(
+				"(M1A)", '').replace("(M4A1)", '')))
+				
+				
 """@bot.event
 async def on_voice_state_update(member, before, after):
 	print(f"member: \n{member}")
