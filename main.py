@@ -1,6 +1,6 @@
-﻿import discord
-import re
-from discord.ext import commands
+﻿import re
+import nextcord
+from nextcord.ext import commands
 from config import settings
 from lists_conf import possible_hello, possible_hello_for_new_user, url, url_gallery, url_gallery_end
 from random import randint
@@ -8,80 +8,77 @@ import urllib.parse
 from req import get_soup
 from bs4 import BeautifulSoup
 import time
-import datetime
 import sqlite3
-#import youtube_dl
-import os
+# import datetime
+# import youtube_dl
+# import os
 
 db = sqlite3.connect('time_voice_users.db')
 
-intents = discord.Intents.all()
-intents.members = True
-intents.voice_states = True
-#intents.presences = True
-#intents.message_content = True
+intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
-client = discord.Client(intents=intents)
+client = nextcord.Client(intents=intents)
 
 
-#@bot.command
-#async def play(ctx, url: str):
-#	song_there = os.path.isfile("song.mp3")
-#	try:
-#		if song_there:
-#			os.remove("song.mp3")
-#	except PermissionError:
-#		return
-#	voice_channel = discord.utils.get(ctx.guild.voice_channels, name="music")
-#	await voice_channel.connect()
-#	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-#	ydl_opts = {
-#		'format': 'bestaudio/best',
-#		'postprocessors': [{
-#			'key': 'FFmpegExtractAudio',
-#			'preferredcodec': 'mp3',
-#			'preferredquality': '192',
-#		}],
-#	}
-#	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-#		ydl.download([url])
-#	for file in os.listdir("./"):
-#		if file.endswith(".mp3"):
-#			os.rename(file, "song.mp3")
-#	voice.play(discord.FFmpegPCMAudio('song.mp3'))
-#
-#
-#@bot.command
-#async def leave(ctx):
-#	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-#	if voice.is_connected():
-#		await voice.disconnect()
-#	else:
-#		pass
-#
-#
-#@bot.command
-#async def pause(ctx):
-#	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-#	if voice.is_playing():
-#		voice.pause()
-#	else:
-#		pass
-#
-#
-#@bot.command
-#async def resume(ctx):
-#	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-#	if voice.is_paused():
-#		voice.resume()
-#	else:
-#		pass
-#
-#
-#@bot.command
-#async def stop(ctx):
-#	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-#	voice.stop()
+"""@bot.command
+async def play(ctx, url: str):
+	song_there = os.path.isfile("song.mp3")
+	try:
+		if song_there:
+			os.remove("song.mp3")
+	except PermissionError:
+		return
+	voice_channel = discord.utils.get(ctx.guild.voice_channels, name="music")
+	await voice_channel.connect()
+	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+	ydl_opts = {
+		'format': 'bestaudio/best',
+		'postprocessors': [{
+			'key': 'FFmpegExtractAudio',
+			'preferredcodec': 'mp3',
+			'preferredquality': '192',
+		}],
+	}
+	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+		ydl.download([url])
+	for file in os.listdir("./"):
+		if file.endswith(".mp3"):
+			os.rename(file, "song.mp3")
+	voice.play(discord.FFmpegPCMAudio('song.mp3'))
+
+
+@bot.command
+async def leave(ctx):
+	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+	if voice.is_connected():
+		await voice.disconnect()
+	else:
+		pass
+
+
+@bot.command
+async def pause(ctx):
+	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+	if voice.is_playing():
+		voice.pause()
+	else:
+		pass
+
+
+@bot.command
+async def resume(ctx):
+	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+	if voice.is_paused():
+		voice.resume()
+	else:
+		pass
+
+
+@bot.command
+async def stop(ctx):
+	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+	voice.stop()"""
+
 
 @bot.event
 async def on_ready():
@@ -160,7 +157,7 @@ async def on_member_join(member):
 	await massage.add_reaction("⚔️")
 	await massage.add_reaction("💣")
 	guild = bot.get_guild(993850749236813915)
-	base_roles = discord.utils.get(guild.roles, name="Бродяга")
+	base_roles = nextcord.utils.get(guild.roles, name="Бродяга")
 	print(base_roles)
 	await member.add_roles(base_roles)
 	mes = massage
@@ -179,22 +176,22 @@ async def on_raw_reaction_add(payload):
 		ourMessageID = id_massage
 		if ourMessageID == payload.message_id:
 			guild = bot.get_guild(993850749236813915)
-			base_roles = discord.utils.get(guild.roles, name="Бродяга")
-			member = discord.utils.get(guild.members, id=payload.user_id)
+			base_roles = nextcord.utils.get(guild.roles, name="Бродяга")
+			member = nextcord.utils.get(guild.members, id=payload.user_id)
 			emoji = payload.emoji.name
 			if emoji == "🔪":
 				await member.remove_roles(base_roles)
-				role = discord.utils.get(guild.roles, name="Новобранец")
+				role = nextcord.utils.get(guild.roles, name="Новобранец")
 				await member.add_roles(role)
 			if emoji == "🗡️":
 				await member.remove_roles(base_roles)
-				role = discord.utils.get(guild.roles, name="Солдат")
+				role = nextcord.utils.get(guild.roles, name="Солдат")
 				await member.add_roles(role)
 				await member.dm_channel.send(
 					"Если хотите влиться в клан и стать Модератором клана - пишите Администраторам или модерам клана.")
 			if emoji == "⚔️":
 				await member.remove_roles(base_roles)
-				role = discord.utils.get(guild.roles, name="Ветеран")
+				role = nextcord.utils.get(guild.roles, name="Ветеран")
 				await member.add_roles(role)
 				await member.dm_channel.send(
 					"Прошаренный да?\nНу смотри, соклановцам всегда помощь нужна.Если хочешь им как-то помочь можешь стать шерпом клана.\nДля этого обратись к Админу клана, заму, или модераторам.\nМы всегда будем рады.")
@@ -202,7 +199,7 @@ async def on_raw_reaction_add(payload):
 					"Если хотите влиться в клан и стать Модератором клана - пишите Администраторам или модерам клана.")
 			if emoji == "💣":
 				await member.remove_roles(base_roles)
-				role = discord.utils.get(guild.roles, name="Воин будущего")
+				role = nextcord.utils.get(guild.roles, name="Воин будущего")
 				await member.add_roles(role)
 				await member.dm_channel.send(
 					"Прошаренный да?\nНу смотри, соклановцам всегда помощь нужна.Если хочешь им как-то помочь можешь стать шерпом клана.\nДля этого обратись к Админу клана, заму, или модераторам.\nМы всегда будем рады.")
@@ -213,10 +210,10 @@ async def on_raw_reaction_add(payload):
 		pass
 	
 	
-#@bot.event
-#async def on_voice_state_update(member, before, after):
-#	print(f"member: \n{member}")
-#	print(f"before: \n{before.requested_to_speak_at}")
-#	print(f"after: \n{after.requested_to_speak_at}")
-
+"""@bot.event
+async def on_voice_state_update(member, before, after):
+	print(f"member: \n{member}")
+	print(f"before: \n{before.requested_to_speak_at}")
+	print(f"after: \n{after.requested_to_speak_at}")
+"""
 bot.run(settings['token'])
