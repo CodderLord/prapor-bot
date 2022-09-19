@@ -2,11 +2,11 @@
 import nextcord
 from nextcord.ext import commands
 from config import settings
-from lists_conf import possible_hello, possible_hello_for_new_user, url, url_gallery, url_gallery_end
+from lists_conf import possible_hello, possible_hello_for_new_user
 from random import randint
-import urllib.parse
-from req import get_soup
-from bs4 import BeautifulSoup
+# import urllib.parse
+# from req import get_soup
+# from bs4 import BeautifulSoup
 import time
 import sqlite3
 from copy import deepcopy
@@ -94,6 +94,11 @@ async def on_ready():
 @bot.event
 async def on_message(message):
 	if message.author == client.user:
+		return
+	if message.chanel.id == 994848589627006986 or message.chanel.id == 995325196644921395 or message.chanel.id == 994234317054152774 or message.chanel.id == 993926689769922570 or message.chanel.id == 994942461610831944:
+		await message.add_reaction("👍️")
+		await message.add_reaction("🔥")
+		await message.add_reaction("😎")
 		return
 	else:
 		message.content = message.content.lower()
