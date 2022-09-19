@@ -158,7 +158,7 @@ async def on_message(message):
 					pass
 			cl_img = help_img.replace('[', '').replace(']', '').replace("'", '').split(',')
 			for im in cl_img:
-				time.sleep(1)
+				time.sleep(3)
 				await message.channel.send(f'{str(im)}')
 """https://discord.com/channels/1000370246428921909/1000370247553011773 ---- моой
 https://discord.com/channels/993850749236813915/993850749677211679 --- нащ"""
