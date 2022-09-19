@@ -14,8 +14,9 @@ from copy import deepcopy
 # import youtube_dl
 # import os
 
-db_voice = sqlite3.connect('time_voice_users.db')
-db_quests = sqlite3.connect('prapor_info.db')
+
+db_voice = sqlite3.connect('/home/inviking/prapor-bot/time_voice_users.db')
+db_quests = sqlite3.connect('/home/inviking/prapor-bot/prapor_info.db')
 
 intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
