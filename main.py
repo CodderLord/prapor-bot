@@ -97,9 +97,9 @@ async def on_message(message):
 		return
 	channel = message.channel
 	if channel.id == 994848589627006986 or channel.id == 995325196644921395 or channel.id == 994234317054152774 or channel.id == 993926689769922570 or channel.id == 994942461610831944:
-		await message.add_reaction("👍️")
-		await message.add_reaction("🔥")
-		await message.add_reaction("😎")
+		await message.add_reaction("💣")
+		await message.add_reaction("💣")
+		await message.add_reaction("💣")
 		return
 	else:
 		message.content = message.content.lower()
