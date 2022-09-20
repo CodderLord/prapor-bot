@@ -14,10 +14,12 @@ from copy import deepcopy
 # import youtube_dl
 # import os
 
-
-db_voice = sqlite3.connect('/home/inviking/prapor-bot/time_voice_users.db')
-db_quests = sqlite3.connect('/home/inviking/prapor-bot/prapor_info.db')
-
+try:
+	db_voice = sqlite3.connect('/home/inviking/prapor-bot/time_voice_users.db')
+	db_quests = sqlite3.connect('/home/inviking/prapor-bot/prapor_info.db')
+except sqlite3.OperationalError:
+	db_voice = sqlite3.connect('time_voice_users.db')
+	db_quests = sqlite3.connect('prapor_info.db')
 intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
 client = nextcord.Client(intents=intents)
@@ -85,9 +87,33 @@ async def stop(ctx):
 	voice.stop()"""
 
 
+def create_table_quests_in_db():
+	db_quests.execute("""CREATE TABLE IF NOT EXISTS quests(
+						id INTEGER PRIMARY KEY AUTOINCREMENT ,
+						name_quest VARCHAR(40) ,
+						how_take VARCHAR(20) ,
+						target TEXT ,
+						win TEXT ,
+						help_img TEXT
+						)
+						""")
+	
+	
+def create_table_voice_in_db():
+	db_voice.execute("""CREATE TABLE IF NOT EXISTS voice_active(
+						id INTEGER PRIMARY KEY AUTOINCREMENT ,
+						id_user INTEGER ,
+						name_user VARCHAR(100) ,
+						active_in_sec INTEGER
+						)
+						""")
+	
+	
 @bot.event
 async def on_ready():
 	print(f'{settings["bot"]} залетел в Дискорд.')
+	create_table_quests_in_db()
+	create_table_voice_in_db()
 	extract_db()
 
 
@@ -100,6 +126,7 @@ async def on_message(message):
 		await message.add_reaction("👍")
 		await message.add_reaction("🔥")
 		await message.add_reaction("😎")
+		await message.add_reaction("👎")
 		return
 	else:
 		message.content = message.content.lower()
@@ -250,10 +277,36 @@ def extract_db():
 				"(M1A)", '').replace("(M4A1)", '')))
 				
 				
-"""@bot.event
+voice_dct = {}
+
+
+def export_voice_data_for_data_base(data):
+	db_voice.execute('INSERT INTO voice_active VALUES(null,?,?,?)', data)
+	db_voice.commit()
+	
+
+def update_voice_data_for_data_base(old_data, new_data):
+	db_voice.execute(f"UPDATE voice_active SET active_in_sec = '{new_data}' WHERE active_in_sec = '{old_data}'")
+	db_voice.commit()
+	
+	
+@bot.event
 async def on_voice_state_update(member, before, after):
-	print(f"member: \n{member}")
-	print(f"before: \n{before.requested_to_speak_at}")
-	print(f"after: \n{after.requested_to_speak_at}")
-"""
+	if before.channel is None:
+		voice_dct[member.id] = time.time()
+	if after.channel is None:
+		voice_dct[member.id] -= time.time()
+		i = db_voice.execute(f'SELECT active_in_sec FROM voice_active WHERE id_user = {member.id}')
+		old_data = None
+		for k in i:
+			old_data = k
+		if old_data is None:
+			export_voice_data_for_data_base((int(member.id), str(member), int(float(str(voice_dct[member.id]).replace('-', '')))))
+		else:
+			old_data = int(float(str(old_data).replace(',', '').replace('(', '').replace(')', '')))
+			new_data = int(float(old_data)) + int(float(str(voice_dct[member.id]).replace('-', '')))
+			print(float(voice_dct[member.id]))
+			print(old_data)
+			print(int(float(str(new_data).replace('-', ''))))
+			update_voice_data_for_data_base(old_data, int(float(new_data)))
 bot.run(settings['token'])
