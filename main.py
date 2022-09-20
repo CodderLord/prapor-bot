@@ -319,8 +319,5 @@ async def on_voice_state_update(member, before, after):
 		else:
 			old_data = int(float(str(old_data).replace(',', '').replace('(', '').replace(')', '')))
 			new_data = int(float(old_data)) + int(float(str(voice_dct[member.id]).replace('-', '')))
-			print(float(voice_dct[member.id]))
-			print(old_data)
-			print(int(float(str(new_data).replace('-', ''))))
 			update_voice_data_for_data_base(old_data, int(float(new_data)))
 bot.run(settings['token'])
