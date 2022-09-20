@@ -23,6 +23,7 @@ except sqlite3.OperationalError:
 intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix=settings["prefix"], intents=intents)
 client = nextcord.Client(intents=intents)
+serverID = 993850749236813915
 
 all_quests = []
 
@@ -109,6 +110,15 @@ def create_table_voice_in_db():
 						""")
 	
 	
+@bot.command()
+async def show_online(ctx):
+	list_online = []
+	args = db_voice.execute(f"SELECT name_user, active_in_sec FROM voice_active")
+	for arg in args:
+		list_online.append(arg)
+	await ctx.send(list_online)
+	
+
 @bot.event
 async def on_ready():
 	print(f'{settings["bot"]} залетел в Дискорд.')
@@ -121,6 +131,7 @@ async def on_ready():
 async def on_message(message):
 	if message.author == client.user:
 		return
+	await bot.process_commands(message)
 	channel = message.channel
 	if channel.id == 994848589627006986 or channel.id == 995325196644921395 or channel.id == 994234317054152774 or channel.id == 993926689769922570 or channel.id == 994942461610831944:
 		await message.add_reaction("👍")
@@ -295,7 +306,10 @@ async def on_voice_state_update(member, before, after):
 	if before.channel is None:
 		voice_dct[member.id] = time.time()
 	if after.channel is None:
-		voice_dct[member.id] -= time.time()
+		try:
+			voice_dct[member.id] -= time.time()
+		except KeyError:
+			return
 		i = db_voice.execute(f'SELECT active_in_sec FROM voice_active WHERE id_user = {member.id}')
 		old_data = None
 		for k in i:
