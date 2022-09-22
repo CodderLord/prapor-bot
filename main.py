@@ -300,7 +300,7 @@ def update_voice_data_for_data_base(old_data, new_data):
 	db_voice.execute(f"UPDATE voice_active SET active_in_sec = '{new_data}' WHERE active_in_sec = '{old_data}'")
 	db_voice.commit()
 	
-	
+
 @bot.event
 async def on_voice_state_update(member, before, after):
 	if before.channel is None:
@@ -320,4 +320,77 @@ async def on_voice_state_update(member, before, after):
 			old_data = int(float(str(old_data).replace(',', '').replace('(', '').replace(')', '')))
 			new_data = int(float(old_data)) + int(float(str(voice_dct[member.id]).replace('-', '')))
 			update_voice_data_for_data_base(old_data, int(float(new_data)))
+			guild = bot.get_guild(993850749236813915)
+			channel = bot.get_channel(1022482873032392764)
+			users_role = []
+			for n in member.roles:
+				users_role.append(n.name)
+			if new_data <= 32000:
+				if "Дикий" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Дикий"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Дикий' за первый часы в клане.(До 9ти часов.)")
+				return
+			if new_data <= 64000:
+				if "Рейдер" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Рейдер"))
+					await channel.send(
+						f"{member.mention} получает повышения до роли 'Рейдер', так держать, тарковчанин!(9-18 часов.)")
+				return
+			if new_data <= 164000:
+				if "Отступник" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Отступник"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Отступник' за достижения в клане.(18-45 часов.)")
+				return
+			if new_data <= 264000:
+				if "Сектант" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Сектант"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Сектант' за знатные заслуги перед сослуживцами.(45-73 часа.)")
+				return
+			if new_data <= 364000:
+				if "глухарь" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="глухарь"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Глухарь'.\nПожалуй, стоит уважать этого бывалого воина(73 - 100 часов.)")
+				return
+			if new_data <= 464000:
+				if "Решала" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Решала"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Решала'.\nЛучше не попадаться ему на просторах Таркова...(100 - 128 часов.)")
+				return
+			if new_data <= 564000:
+				if "Штурман" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Штурман"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Штурман'\nУбойный воин, драк не боится, смерть приветствует.(100 - 128 часов.)")
+				return
+			if new_data <= 664000:
+				if "Санитар" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Санитар"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Санитар'.\nПолечит, будь здоров 👻.(128 - 156 часов.)")
+				return
+			if new_data <= 764000:
+				if "Big Pipe" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(156 - 183 часов.)")
+				return
+			if new_data <= 864000:
+				if "Bird Eye" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Bird Eye"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Bird Eye'.\nУчует твою задницу за милю, можешь и не прятатся🕵️‍♂️.\n(183 - 210 часов.)")
+				return
+			else:
+				if "Dead Knight" not in users_role:
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Dead Knight"))
+					await channel.send(
+						f"{member.mention} получает максимальный ранг в клане.\nГоворят, в последний раз его видели на Маяке, но лучше бы вам его не искать😈.(240 - ... часов.)")
+				return
+
+
 bot.run(settings['token'])
