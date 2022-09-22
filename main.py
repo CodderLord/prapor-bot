@@ -335,7 +335,10 @@ async def on_voice_state_update(member, before, after):
 				return
 			if new_data <= 64000:
 				if "Рейдер" not in users_role:
-					await member.remove_roles(nextcord.utils.get(guild.roles, name="Дикий"))
+					try:
+						await member.remove_roles(nextcord.utils.get(guild.roles, name="Дикий"))
+					except Exception:
+						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Рейдер"))
 					await channel.send(
 						f"{member.mention} получает повышения до роли 'Рейдер', так держать, тарковчанин!(9-18 часов.)")
