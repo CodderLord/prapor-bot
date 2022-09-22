@@ -325,6 +325,8 @@ async def on_voice_state_update(member, before, after):
 			users_role = []
 			for n in member.roles:
 				users_role.append(n.name)
+			if 'Модератор' or 'старший модератор' or 'BIG BOSS' in users_role:
+				return
 			if new_data <= 32000:
 				if "Дикий" not in users_role:
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Дикий"))
@@ -333,60 +335,70 @@ async def on_voice_state_update(member, before, after):
 				return
 			if new_data <= 64000:
 				if "Рейдер" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Дикий"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Рейдер"))
 					await channel.send(
 						f"{member.mention} получает повышения до роли 'Рейдер', так держать, тарковчанин!(9-18 часов.)")
 				return
 			if new_data <= 164000:
 				if "Отступник" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Рейдер"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Отступник"))
 					await channel.send(
 						f"{member.mention} получает повышение до роли 'Отступник' за достижения в клане.(18-45 часов.)")
 				return
 			if new_data <= 264000:
 				if "Сектант" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Отступник"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Сектант"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Сектант' за знатные заслуги перед сослуживцами.(45-73 часа.)")
+						f"{member.mention} получает повышение до роли 'Сектант' за знатные заслуги перед сослуживцами.(73-101 часа.)")
 				return
 			if new_data <= 364000:
 				if "глухарь" not in users_role:
-					await member.add_roles(nextcord.utils.get(guild.roles, name="глухарь"))
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Сектант"))
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Глухарь"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Глухарь'.\nПожалуй, стоит уважать этого бывалого воина(73 - 100 часов.)")
+						f"{member.mention} получает повышение до роли 'Глухарь'.\nПожалуй, стоит уважать этого бывалого воина(101 - 128 часов.)")
 				return
 			if new_data <= 464000:
 				if "Решала" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Глухарь"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Решала"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Решала'.\nЛучше не попадаться ему на просторах Таркова...(100 - 128 часов.)")
+						f"{member.mention} получает повышение до роли 'Решала'.\nЛучше не попадаться ему на просторах Таркова...(128 - 156 часов.)")
 				return
 			if new_data <= 564000:
 				if "Штурман" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Решала"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Штурман"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Штурман'\nУбойный воин, драк не боится, смерть приветствует.(100 - 128 часов.)")
+						f"{member.mention} получает повышение до роли 'Штурман'\nУбойный воин, драк не боится, смерть приветствует.(156 - 184 часов.)")
 				return
 			if new_data <= 664000:
 				if "Санитар" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Штурман"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Санитар"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Санитар'.\nПолечит, будь здоров 👻.(128 - 156 часов.)")
+						f"{member.mention} получает повышение до роли 'Санитар'.\nПолечит, будь здоров 👻.(128 - 184 часов.)")
 				return
 			if new_data <= 764000:
 				if "Big Pipe" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Санитар"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(156 - 183 часов.)")
+						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(184 - 212 часов.)")
 				return
 			if new_data <= 864000:
 				if "Bird Eye" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Bird Eye"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Bird Eye'.\nУчует твою задницу за милю, можешь и не прятатся🕵️‍♂️.\n(183 - 210 часов.)")
+						f"{member.mention} получает повышение до роли 'Bird Eye'.\nУчует твою задницу за милю, можешь и не прятатся🕵️‍♂️.\n(212 - 240 часов.)")
 				return
 			else:
 				if "Dead Knight" not in users_role:
+					await member.remove_roles(nextcord.utils.get(guild.roles, name="Bird Eye"))
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Dead Knight"))
 					await channel.send(
 						f"{member.mention} получает максимальный ранг в клане.\nГоворят, в последний раз его видели на Маяке, но лучше бы вам его не искать😈.(240 - ... часов.)")
