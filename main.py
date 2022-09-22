@@ -213,9 +213,9 @@ async def on_member_join(member):
 	global id_massage, mes
 	for ch in bot.get_guild(member.guild.id).channels:
 		if ch.id == 993850749677211679:
-			await bot.get_channel(ch.id).send(f"{possible_hello_for_new_user[randint(0, len(possible_hello_for_new_user)-1)]}{member.name}")
+			await bot.get_channel(ch.id).send(f"{possible_hello_for_new_user[randint(0, len(possible_hello_for_new_user)-1)]}{member.mention}")
 	await member.create_dm()
-	await member.dm_channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{member.name}\n'
+	await member.dm_channel.send(f'{possible_hello[randint(0, len(possible_hello)-1)]}{member.mention}\n'
 		f'Я могу порыться в документах, поискать что-то о интересующих тебя квестах\nДля этого просто напиши мне, или в специальный чат "Для новеньких --> Квесты прапор". \nПрапор помоги " и добавь " с квестом [Название квеста, можно и примерное]"')
 	massage = await member.dm_channel.send(
 		"Ну а теперь, напиши мне количество своего опыта в Таркове\n**Нож - меньше 300 часов**\n**Меч - от 300 до 1000 часов**\n**Два меча - от 1000 часов**\n**Бомба - от 3000 часов**\nКликни на нужную рекацию для указания кол. часов.\nЭто нужно для выдачи роли.")
