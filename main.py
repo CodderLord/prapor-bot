@@ -326,7 +326,6 @@ async def on_voice_state_update(member, before, after):
 			for n in member.roles:
 				users_role.append(n.name)
 			if 'Модератор' in users_role or 'старший модератор' in users_role or 'BIG BOSS' in users_role:
-				print('Сработало исключение')
 				return
 			if new_data <= 32000:
 				if "Дикий" not in users_role:
