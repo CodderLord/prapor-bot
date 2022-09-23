@@ -115,7 +115,7 @@ async def show_online(ctx):
 	list_online = {}
 	args = db_voice.execute(f"SELECT name_user, active_in_sec FROM voice_active ORDER BY active_in_sec")
 	for name, active in args:
-		list_online[name] = int(int(active)/60)
+		list_online[name] = int((active/60)/60)
 	await ctx.send(list_online)
 	
 
