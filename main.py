@@ -254,7 +254,7 @@ async def on_member_remove(member):
 	channel = bot.get_channel(1013337671394922546)
 	await channel.send(f"{member} ушёл из сервера.")
 	
-	
+
 @bot.event
 async def on_raw_reaction_add(payload):
 	try:
@@ -344,7 +344,7 @@ async def on_voice_state_update(member, before, after):
 			users_role = []
 			for n in member.roles:
 				users_role.append(n.name)
-			if 'Модератор' in users_role or 'старший модератор' in users_role or 'BIG BOSS' in users_role:
+			if 'Модератор' in users_role or 'Cтарший Модератор' in users_role or 'BIG BOSS' in users_role:
 				return
 			if new_data <= 32000:
 				if "Дикий" not in users_role:
