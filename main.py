@@ -1,8 +1,9 @@
 ﻿import re
 import nextcord
 from nextcord.ext import commands
+from nextcord import slash_command
 from config import settings
-from lists_conf import possible_hello, possible_hello_for_new_user
+from lists_conf import possible_hello, possible_hello_for_new_user, user_groups
 from random import randint
 # import urllib.parse
 # from req import get_soup
@@ -118,6 +119,24 @@ async def show_online(ctx):
 		list_online[name] = int((active/60)/60)
 	await ctx.send(list_online)
 	
+	
+@bot.command()
+async def invite(ctx, member: nextcord.Member = None):
+	guild = bot.get_guild(993850749236813915)
+	try:
+		await member.add_roles(nextcord.utils.get(guild.roles, name=user_groups[f'{ctx.author}']))
+	except KeyError:
+		pass
+
+
+@bot.command()
+async def re_invite(ctx, member: nextcord.Member = None):
+	guild = bot.get_guild(993850749236813915)
+	try:
+		await member.remove_roles(nextcord.utils.get(guild.roles, name=user_groups[f'{ctx.author}']))
+	except KeyError:
+		pass
+
 
 @bot.event
 async def on_ready():
