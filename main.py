@@ -428,11 +428,21 @@ async def on_voice_state_update(member, before, after):
 						await member.remove_roles(nextcord.utils.get(guild.roles, name="Санитар"))
 					except Exception:
 						pass
-					await member.add_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Killa"))
 					await channel.send(
 						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(184 - 212 часов.)")
 				return
 			if new_data <= 864000:
+				if "Big Pipe" not in users_role:
+					try:
+						await member.remove_roles(nextcord.utils.get(guild.roles, name="Killa"))
+					except Exception:
+						pass
+					await member.add_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
+					await channel.send(
+						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(184 - 212 часов.)")
+				return
+			if new_data <= 964000:
 				if "Bird Eye" not in users_role:
 					try:
 						await member.remove_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
