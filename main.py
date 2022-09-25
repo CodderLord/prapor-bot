@@ -344,7 +344,7 @@ async def on_voice_state_update(member, before, after):
 			users_role = []
 			for n in member.roles:
 				users_role.append(n.name)
-			if 'Модератор' in users_role or 'Cтарший Модератор' in users_role or 'BIG BOSS' in users_role:
+			if 'Модератор' in users_role or 'Старший Модератор' in users_role or 'BIG BOSS' in users_role:
 				return
 			if new_data <= 32000:
 				if "Дикий" not in users_role:
@@ -380,7 +380,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Сектант"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Сектант' за знатные заслуги перед сослуживцами.(73-101 часа.)")
+						f"{member.mention} получает повышение до роли 'Сектант' за знатные заслуги перед сослуживцами.(45-73 часа.)")
 				return
 			if new_data <= 364000:
 				if "глухарь" not in users_role:
@@ -390,7 +390,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Глухарь"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Глухарь'.\nПожалуй, стоит уважать этого бывалого воина(101 - 128 часов.)")
+						f"{member.mention} получает повышение до роли 'Глухарь'.\nПожалуй, стоит уважать этого бывалого воина(73 - 101 часов.)")
 				return
 			if new_data <= 464000:
 				if "Решала" not in users_role:
@@ -400,7 +400,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Решала"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Решала'.\nЛучше не попадаться ему на просторах Таркова...(128 - 156 часов.)")
+						f"{member.mention} получает повышение до роли 'Решала'.\nЛучше не попадаться ему на просторах Таркова...(101 - 128 часов.)")
 				return
 			if new_data <= 564000:
 				if "Штурман" not in users_role:
@@ -410,7 +410,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Штурман"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Штурман'\nУбойный воин, драк не боится, смерть приветствует.(156 - 184 часов.)")
+						f"{member.mention} получает повышение до роли 'Штурман'\nУбойный воин, драк не боится, смерть приветствует.(128 - 156 часов.)")
 				return
 			if new_data <= 664000:
 				if "Санитар" not in users_role:
@@ -420,7 +420,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Санитар"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Санитар'.\nПолечит, будь здоров 👻.(128 - 184 часов.)")
+						f"{member.mention} получает повышение до роли 'Санитар'.\nПолечит, будь здоров 👻.(156 - 184 часов.)")
 				return
 			if new_data <= 764000:
 				if "Big Pipe" not in users_role:
@@ -440,7 +440,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Big Pipe"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(184 - 212 часов.)")
+						f"{member.mention} получает повышение до роли 'Big Pipe'.\nГоворят у него действительно Big Pipe, но свидетелей нет💀. \n(212 - 240 часов.)")
 				return
 			if new_data <= 964000:
 				if "Bird Eye" not in users_role:
@@ -450,7 +450,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Bird Eye"))
 					await channel.send(
-						f"{member.mention} получает повышение до роли 'Bird Eye'.\nУчует твою задницу за милю, можешь и не прятатся🕵️‍♂️.\n(212 - 240 часов.)")
+						f"{member.mention} получает повышение до роли 'Bird Eye'.\nУчует твою задницу за милю, можешь и не прятатся🕵️‍♂️.\n(240 - 267 часов.)")
 				return
 			else:
 				if "Dead Knight" not in users_role:
@@ -460,7 +460,7 @@ async def on_voice_state_update(member, before, after):
 						pass
 					await member.add_roles(nextcord.utils.get(guild.roles, name="Dead Knight"))
 					await channel.send(
-						f"{member.mention} получает максимальный ранг в клане.\nГоворят, в последний раз его видели на Маяке, но лучше бы вам его не искать😈.(240 - ... часов.)")
+						f"{member.mention} получает максимальный ранг в клане.\nГоворят, в последний раз его видели на Маяке, но лучше бы вам его не искать😈.(267 - ... часов.)")
 				return
 
 
