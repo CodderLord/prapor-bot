@@ -48,12 +48,12 @@ def create_table_voice_in_db():
 async def show_online(ctx):
 	list_online = ''
 	args = db_voice.execute(f"SELECT name_user, active_in_sec FROM voice_active ORDER BY active_in_sec")
-	active = open('active.txt', 'w+')
+	active = open('/home/inviking/prapor-bot/active.txt', 'w+')
 	for i, o in args:
 		list_online += f'{i} -- {str((int(o)//60)//60)} часа.\n'
 	active.write(list_online)
 	active.close()
-	await ctx.send(file=nextcord.File("active.txt"))
+	await ctx.send(file=nextcord.File("/home/inviking/prapor-bot/active.txt"))
 	
 	
 @bot.command()
