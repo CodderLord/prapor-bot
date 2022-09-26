@@ -1,19 +1,12 @@
 ﻿import re
 import nextcord
 from nextcord.ext import commands
-from nextcord import slash_command
 from config import settings
 from lists_conf import possible_hello, possible_hello_for_new_user, user_groups
 from random import randint
-# import urllib.parse
-# from req import get_soup
-# from bs4 import BeautifulSoup
 import time
 import sqlite3
 from copy import deepcopy
-# import datetime
-# import youtube_dl
-# import os
 
 try:
 	db_voice = sqlite3.connect('/home/inviking/prapor-bot/time_voice_users.db')
@@ -27,66 +20,6 @@ client = nextcord.Client(intents=intents)
 serverID = 993850749236813915
 
 all_quests = []
-
-
-"""@bot.command
-async def play(ctx, url: str):
-	song_there = os.path.isfile("song.mp3")
-	try:
-		if song_there:
-			os.remove("song.mp3")
-	except PermissionError:
-		return
-	voice_channel = discord.utils.get(ctx.guild.voice_channels, name="music")
-	await voice_channel.connect()
-	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-	ydl_opts = {
-		'format': 'bestaudio/best',
-		'postprocessors': [{
-			'key': 'FFmpegExtractAudio',
-			'preferredcodec': 'mp3',
-			'preferredquality': '192',
-		}],
-	}
-	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-		ydl.download([url])
-	for file in os.listdir("./"):
-		if file.endswith(".mp3"):
-			os.rename(file, "song.mp3")
-	voice.play(discord.FFmpegPCMAudio('song.mp3'))
-
-
-@bot.command
-async def leave(ctx):
-	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-	if voice.is_connected():
-		await voice.disconnect()
-	else:
-		pass
-
-
-@bot.command
-async def pause(ctx):
-	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-	if voice.is_playing():
-		voice.pause()
-	else:
-		pass
-
-
-@bot.command
-async def resume(ctx):
-	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-	if voice.is_paused():
-		voice.resume()
-	else:
-		pass
-
-
-@bot.command
-async def stop(ctx):
-	voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-	voice.stop()"""
 
 
 def create_table_quests_in_db():
@@ -113,11 +46,14 @@ def create_table_voice_in_db():
 	
 @bot.command()
 async def show_online(ctx):
-	list_online = {}
+	list_online = ''
 	args = db_voice.execute(f"SELECT name_user, active_in_sec FROM voice_active ORDER BY active_in_sec")
-	for name, active in args:
-		list_online[name] = int((active/60)/60)
-	await ctx.send(list_online)
+	active = open('active.txt', 'w+')
+	for i, o in args:
+		list_online += f'{i} -- {str((int(o)//60)//60)} часа.\n'
+	active.write(list_online)
+	active.close()
+	await ctx.send(file=nextcord.File("active.txt"))
 	
 	
 @bot.command()
@@ -136,8 +72,8 @@ async def re_invite(ctx, member: nextcord.Member = None):
 		await member.remove_roles(nextcord.utils.get(guild.roles, name=user_groups[f'{ctx.author}']))
 	except KeyError:
 		pass
-
-
+	
+	
 @bot.event
 async def on_ready():
 	print(f'{settings["bot"]} залетел в Дискорд.')
